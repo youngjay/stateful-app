@@ -33,7 +33,7 @@ var App = mixin(
         },
         {
 
-            add: function(paths, components, onStateChange) {
+            add: function(paths, components, handleStateChange) {
                 var wrapper = this._getComponentWrapper(components);
 
                 if (!paths) {
@@ -54,9 +54,9 @@ var App = mixin(
 
                     if (pathIsMatch(path, paths)) {
                         visible(true);
-                        if (onStateChange) {
+                        if (handleStateChange) {
                             ko.dependencyDetection.ignore(function() {
-                                onStateChange(query, path);
+                                handleStateChange(query, path);
                             });
                         }
                     }
@@ -70,6 +70,10 @@ var App = mixin(
             },
 
             _getComponentWrapper: function(components) {
+                if (!Array.isArray(ko.unwrap(components))) {
+                    components = [components];
+                }
+
                 return {
                     visible: ko.observable(true),
                     components: components,
